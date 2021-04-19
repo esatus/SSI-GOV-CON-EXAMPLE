@@ -1,5 +1,5 @@
 FROM openjdk:11-jre-slim
-COPY --from=build /app/target/ssi-gov-con-example-0.0.1-SNAPSHOT-exec.jar /app/ssi-gov-con-example.jar
+COPY /app/target/ssi-gov-con-example-0.0.1-SNAPSHOT-exec.jar /app/ssi-gov-con-example.jar
 RUN chmod 777 /app/ssi-gov-con-example.jar
 WORKDIR /app
 
