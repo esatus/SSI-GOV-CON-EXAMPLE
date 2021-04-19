@@ -1,0 +1,63 @@
+{
+      "environmentFiles": [
+        {
+          "value": "arn:aws:s3:::self-config/environment.env",
+          "type": "s3"
+        }
+      ],
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "cpu": 256,
+      "environment": [
+        {
+          "name": "SERVER_PORT",
+          "value": "80"
+        },
+        {
+          "name": "SERVICE",
+          "value": "ssi-gov-con-example"
+        }
+      ],
+      "repositoryCredentials": {
+        "credentialsParameter": "arn:aws:secretsmanager:::secret:pullsecret"
+      },
+      "mountPoints": [
+        {
+          "containerPath": "/app/config",
+          "sourceVolume": "config-volume"
+        },
+        {
+          "containerPath": "/app/log",
+          "sourceVolume": "log-volume"
+        }
+      ],
+      "secrets": [
+        {
+          "valueFrom": "arn:aws:secretsmanager:::secret:self-secret:TOKEN::",
+          "name": "TOKEN"
+        },
+		{
+          "valueFrom": "arn:aws:secretsmanager:::secret:self-secret:SSI_PRIVATE_KEY_PASSPHRASE::",
+          "name": "SSI_PRIVATE_KEY_PASSPHRASE"
+        },
+        {
+          "valueFrom": "arn:aws:secretsmanager:::secret:self-secret:SSI_PRIVATE_KEY::",
+          "name": "SSI_PRIVATE_KEY"
+        },
+        {
+          "valueFrom": "arn:aws:secretsmanager:::secret:self-secret:SSI_CERTIFICATE::",
+          "name": "SSI_CERTIFICATE"
+        }
+      ],
+      "memory": 1024,
+      "memoryReservation": 1024,
+      "volumesFrom": [],
+      "image": "acrssi.azurecr.io/esatus_ssi-gov-con-example-release:latest",
+      "essential": true,
+      "name": "ssi-gov-con-example"
+}

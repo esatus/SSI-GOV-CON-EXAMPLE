@@ -1,0 +1,22 @@
+server:
+  port: 80
+  
+spring:
+  main:
+    banner-mode: 'off'
+        
+logging:
+  level:
+    org:
+      atmosphere: WARN
+      apache: WARN
+      springframework: WARN
+      
+ssi:
+  api-token: ${TOKEN}
+  gov:
+    core:
+      web:
+        protocol: 'http'
+        host: 'ssi-gov-core'
+        port: 80
