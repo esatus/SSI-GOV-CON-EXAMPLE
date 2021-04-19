@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssi-gov-con-example
+  namespace: {namespace}
+  labels:
+    app: ssi-gov-con-example
+spec:
+  selector:
+    matchLabels:
+      app: ssi-gov-con-example
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: ssi-gov-con-example
+    spec:
+      containers:
+      - name: ssi-gov-con-example
+        image: acrssi.azurecr.io/esatus_ssi-gov-con-example-release:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: SERVICE
+          valueFrom:
+            configMapKeyRef:
+              key: EXAMPLE_SERVICE
+              name: self-config
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: EXAMPLE_PORT
+              name: self-config  
+        - name: TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: self-secret
+              key: token
+        resources:
+          requests:
+            memory: "64Mi"
+          limits:
+            memory: "1024Mi"
+        volumeMounts:
+        - mountPath: /app/log
+          name: log-volume
+        - mountPath: /app/config/
+          name: config-volume
+      imagePullSecrets:
+      - name: {pullsecret}
+      volumes:
+      - name: log-volume
+        persistentVolumeClaim:
+          claimName: logshare
+      - name: config-volume
+        configMap:
+          name: self-config
+          defaultMode: 420
+          items:
+           - key: application.yaml
+             path: application.yaml
+           - key: logback-spring.xml
+             path: logback-spring.xml
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<springProfile name="local">
+		<contextName>ssi-gov-con-example</contextName>
+		<property name="LOG_FILE" value="ssi-gov-con-example" />
+		<property name="SERVICE_NAME" value="ssi-gov-con-example" />
+		<statusListener
+			class="ch.qos.logback.core.status.NopStatusListener" />
+		<appender
+			class="ch.qos.logback.core.rolling.RollingFileAppender"
+			name="FILE_JSON">
+			<file>log/${LOG_FILE}.log.json</file>
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>log/${LOG_FILE}.%d{yyyy-MM-dd}.log.json
+				</fileNamePattern>
+				<maxHistory>3</maxHistory>
+			</rollingPolicy>
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+				<fieldNames>
+					<levelValue>[ignore]</levelValue>
+				</fieldNames>
+				<customFields>{"service-name":"${SERVICE_NAME}"}</customFields>
+			</encoder>
+		</appender>
+		<appender class="ch.qos.logback.core.ConsoleAppender"
+			name="CONSOLE">
+			<withJansi>true</withJansi>
+			<layout class="ch.qos.logback.classic.PatternLayout">
+				<Pattern>LOCAL - %d [%t] %highlight(%-5level) %cyan(%logger{36}) - %msg%n
+				</Pattern>
+			</layout>
+		</appender>
+		<logger level="DEBUG" name="com.esatus.ssi" />
+		<logger level="WARN" name="org.atmosphere" />
+		<logger level="WARN" name="org.apache" />
+		<logger level="WARN" name="org.springframework" />
+		<logger level="WARN" name="springfox" />
+
+		<root level="INFO">
+			<appender-ref ref="FILE_JSON" />
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+	<springProfile name="!local">
+		<contextName>ssi-gov-con-example</contextName>
+		<property name="LOG_FILE" value="ssi-gov-con-example" />
+		<property name="SERVICE_NAME" value="ssi-gov-con-example" />
+		<statusListener
+			class="ch.qos.logback.core.status.NopStatusListener" />
+		<appender
+			class="ch.qos.logback.core.rolling.RollingFileAppender"
+			name="FILE_JSON">
+			<file>log/${LOG_FILE}.log.json</file>
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>log/${LOG_FILE}.%d{yyyy-MM-dd}.log.json
+				</fileNamePattern>
+				<maxHistory>3</maxHistory>
+			</rollingPolicy>
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+				<fieldNames>
+					<levelValue>[ignore]</levelValue>
+				</fieldNames>
+				<customFields>{"service-name":"${SERVICE_NAME}"}</customFields>
+			</encoder>
+		</appender>
+		<appender class="ch.qos.logback.core.ConsoleAppender"
+			name="CONSOLE">
+			<layout class="ch.qos.logback.classic.PatternLayout">
+				<Pattern>DEFAULT - %d [%t] %-5level %logger{36} - %msg%n
+				</Pattern>
+			</layout>
+		</appender>
+		<logger level="WARN" name="com.esatus.ssi" />
+		<logger level="WARN" name="org.atmosphere" />
+		<logger level="WARN" name="org.apache" />
+		<logger level="WARN" name="org.springframework" />
+		<logger level="WARN" name="springfox" />
+		<root level="INFO">
+			<appender-ref ref="FILE_JSON" />
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+</configuration>
